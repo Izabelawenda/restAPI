@@ -11,6 +11,9 @@ public class ProductConfig {
 
     @Bean
     CommandLineRunner commandLineRunner(ProductRepository repository) {
+        // todo: this is ok for testing, But I think it should not be included in configuration other than testing
+        // If product list is modified by someone else (other application), as soon as you restart this application, you will add/modify the product list, which may be not desirable.
+        // Is it possible to run this configuration on property configuration condition on "test" profile used condition?
         return args -> {
             Product light_roast_coffee = new Product(
                     "Light roast coffee",
