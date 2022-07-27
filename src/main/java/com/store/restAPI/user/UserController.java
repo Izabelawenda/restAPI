@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 public class UserController {
 
@@ -31,8 +33,8 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public String loginUser(@RequestBody User user){
+    public String loginUser(HttpSession session, @RequestBody User user){
         userService.loginUser(user);
-        return "redirect:products";
+        return session.getId();
     }
 }

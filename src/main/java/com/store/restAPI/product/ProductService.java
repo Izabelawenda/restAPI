@@ -42,26 +42,21 @@ public class ProductService {
 
     public void removeCartItem(CartItem item) {
 
-        for(CartItem it: cart){
-            if(it.getId().equals(item.getId())){
-                cart.remove(it);
-            }
-            else{
-                throw new IllegalStateException("there is no product with that id");
-            }
+        if(cart.removeIf(n -> n.getId().equals(item.getId()))){
+            System.out.println("item removed");
+        }
+        else{
+            throw new IllegalStateException("there is no product with that id");
         }
     }
 
     public void modifyCartItem(CartItem item) {
 
-        for(CartItem it: cart){
-            if(it.getId().equals(item.getId())){
-                cart.remove(it);
-                cart.add(item);
-            }
-            else{
-                throw new IllegalStateException("there is no product with that id");
-            }
+        if(cart.removeIf(n -> n.getId().equals(item.getId()))){
+            cart.add(item);
+        }
+        else{
+            throw new IllegalStateException("there is no product with that id");
         }
     }
 }
