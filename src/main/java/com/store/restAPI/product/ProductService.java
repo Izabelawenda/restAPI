@@ -2,6 +2,7 @@ package com.store.restAPI.product;
 
 
 import com.store.restAPI.shoppingcart.CartItem;
+import com.store.restAPI.shoppingcart.ShoppingCart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,8 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ArrayList<CartItem> cart;
+    ArrayList<CartItem> cart;
+    ShoppingCart shoppingCart = new ShoppingCart();
 
     @Autowired
     public ProductService(ProductRepository productRepository, ArrayList<CartItem> cart) {
@@ -25,8 +27,11 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public List<CartItem> showCart() {return cart;}
+    public List<CartItem> showCart() {
 
+        System.out.println("Total cart price: " + shoppingCart.getTotalPrice());
+        return shoppingCart.getCartItems();
+    }
 
     public void addProductToCart(CartItem item) {
 
@@ -37,12 +42,15 @@ public class ProductService {
         else if(item.getQuantity() >  productOptional.get().getQuantity()){
             throw new IllegalStateException("the quantity of this product is lower than requested");
         }
+        item.setPrice(productOptional.get().getPrice());
         cart.add(item);
+        shoppingCart.setCartItems(cart);
     }
 
     public void removeCartItem(CartItem item) {
 
         if(cart.removeIf(n -> n.getId().equals(item.getId()))){
+            shoppingCart.setCartItems(cart);
             System.out.println("item removed");
         }
         else{
@@ -54,6 +62,7 @@ public class ProductService {
 
         if(cart.removeIf(n -> n.getId().equals(item.getId()))){
             cart.add(item);
+            shoppingCart.setCartItems(cart);
         }
         else{
             throw new IllegalStateException("there is no product with that id");

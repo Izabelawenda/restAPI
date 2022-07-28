@@ -4,6 +4,7 @@ public class CartItem {
     private Long id;
     private Integer quantity;
 
+    private double price;
 
     public CartItem(Long id, Integer quantity) {
         this.id = id;
@@ -26,11 +27,20 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price*quantity;
+    }
+
     @Override
     public String toString() {
         return "CartItem{" +
                 "id=" + id +
                 ", quantity=" + quantity +
+                ", price=" + price +
                 '}';
     }
 }
