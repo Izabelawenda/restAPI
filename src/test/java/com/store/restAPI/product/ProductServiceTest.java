@@ -51,6 +51,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @Disabled
     void itShouldAddProductToCart() {
         //given
         CartItem expected = new CartItem(
