@@ -40,6 +40,5 @@ public class UserService {
         else if(!userConfig.passwordEncoder().matches(user.getPassword(), userOptional.get().getPassword())){
             throw new IllegalStateException("wrong password");
         }
-        //!userOptional.get().getPassword().equals(user.getPassword())
     }
 }

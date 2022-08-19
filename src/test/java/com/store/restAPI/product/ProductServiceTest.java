@@ -5,8 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.class)
 class ProductServiceTest {
 
     private ProductService underTest;
@@ -28,11 +31,12 @@ class ProductServiceTest {
         underTest = new ProductService(productRepository, cart);
     }
 
+
     @Test
     void itShouldFindAllProducts() {
 
         //when
-        underTest.findAll();
+        System.out.println(underTest.findAll());
 
         //then
         verify(productRepository).findAll();
@@ -43,11 +47,13 @@ class ProductServiceTest {
     @Disabled
     void itShouldShowCart() {
 
+        CartItem item = new CartItem(1L,10);
         //when
-        underTest.showCart();
+        cart.add(item);
+        underTest.addProductToCart(item);
 
         //then
-        verify(productRepository).findAll();
+        assertThat(underTest.showCart()).isEqualTo(item);
     }
 
     @Test

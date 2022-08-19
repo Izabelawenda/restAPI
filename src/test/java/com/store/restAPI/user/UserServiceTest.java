@@ -7,8 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -33,7 +35,7 @@ class UserServiceTest {
     @Test
     void itShouldFindAllUsers() {
         //when
-        underTest.findAll();
+        System.out.println(underTest.findAll());
 
         //then
         verify(userRepository).findAll();
@@ -41,7 +43,6 @@ class UserServiceTest {
     }
 
     @Test
-    @Disabled
     void addNewUser() {
         //given
         User expected = new User(
@@ -50,6 +51,7 @@ class UserServiceTest {
         );
 
         //when
+        Mockito.when(userConfig.passwordEncoder()).thenReturn(new BCryptPasswordEncoder());
         underTest.addNewUser(expected);
 
         //then
@@ -60,7 +62,6 @@ class UserServiceTest {
     }
 
     @Test
-    @Disabled
     void loginUser() {
         //given
         User expected = new User(
@@ -69,11 +70,14 @@ class UserServiceTest {
         );
 
         //when
+        Mockito.when(userConfig.passwordEncoder()).thenReturn(new BCryptPasswordEncoder());
         underTest.addNewUser(expected);
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userArgumentCaptor.capture());
+        User capturedUser = userArgumentCaptor.getValue();
 
         //then
-        assertDoesNotThrow(() -> underTest.loginUser(expected));
-
+        assertThat(capturedUser).isEqualTo(expected);
     }
 
 }
